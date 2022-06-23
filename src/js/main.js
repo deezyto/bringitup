@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const pages = [];
   const slides = [];
+  const moduleContentSlides = [];
   const feedSlides = [];
 
   let i = 0;
@@ -68,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function hidePages(selector, arr, removeClass=0) {
+  function hidePages(selector, arr, removeClass = 0) {
     
     arr.forEach((elem, i) => {
       //selector.querySelector(`.${elem}`).classList.add('hide');
@@ -85,20 +86,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function showPage(selector, arr, number=0, plusClass=0) {
+  function showPage(selector, arr, number = 0, plusClass = 0) {
     //selector.querySelector(`.${arr[number]}`).classList.remove('hide');
     if (plusClass) {
       selector.querySelector(`.${arr[number]}`).classList.add(plusClass);
     } else {
-      selector.querySelector(`.${arr[number]}`).style = 'display: block';
-      modulesContentSliderTitle[0].style.opacity = '1';
+        selector.querySelector(`.${arr[number]}`).style = 'display: block';
+        modulesContentSliderTitle[0].style.opacity = '1';
+        modulesContenSliderArrow[0].style.opacity = '1';
+        cardControls[0].style = 'margin-top: -5em';
+        cardDescription[0].style.opacity = '1';
       if (selector === slider) {
         miniSlideTitle[number].style.opacity = '1';
         miniSlideArrow[number].style.opacity = '1';
         selector.querySelector(`.${arr[number + 1]}`).style = 'display: block';
       } else if (selector === modulesContentSlider) {
         console.log('modulesContentSlider', number, modulesContentSliderTitle[0].style.opacity = '1');
-        modulesContentSliderTitle[0].style.opacity = '1';
         modulesContentSliderTitle[number].style.opacity = '1';
         modulesContenSliderArrow[number].style.opacity = '1';
         cardControls[number].style = 'margin-top: -5em';
@@ -147,9 +150,14 @@ document.addEventListener('DOMContentLoaded', () => {
           i = 0;
         }
           
-        hidePages(modulesContentSlider, slides);
-        showPage(modulesContentSlider, slides, i);
+        hidePages(modulesContentSlider, moduleContentSlides);
+        showPage(modulesContentSlider, moduleContentSlides, i);
       }, 5000);
+    } else {
+      i = 0;
+      hidePages(modulesContentSlider, moduleContentSlides);
+      showPage(modulesContentSlider, moduleContentSlides, i);
+      clearInterval(autoNextSlide);
     }
   }
 
@@ -158,7 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
     SelectorPrev.addEventListener('click', () => {
       console.log('click');
       console.log(slides, 'slides');
-      //console.log(currentMiniSlide.textContent);
+      clearInterval(autoNextSlide);
+
       if (i === 0) {
         i = slides.length;
       }
@@ -258,13 +267,16 @@ document.addEventListener('DOMContentLoaded', () => {
     createArrChildNodes(slider, slides);
     hidePages(slider, slides);
     showPage(slider, slides);
+    createArrChildNodes(modulesContentSlider, moduleContentSlides);
+    hidePages(modulesContentSlider, moduleContentSlides);
+    showPage(modulesContentSlider, moduleContentSlides);
     clickLogo(page, pages);
     nextSlide(page, pages);
     createArrChildNodes(feedSlider, feedSlides);
     hidePages(feedSlider, feedSlides, 'feed__item-active');
     showPage(feedSlider, feedSlides, 0, 'feed__item-active');
     prevOrNextMiniSlide(prevSlider, nextSlider, slider, slides);
-    prevOrNextMiniSlide(prevModulesContentSlider, nextModulesContentSlider, modulesContentSlider, slides);
+    prevOrNextMiniSlide(prevModulesContentSlider, nextModulesContentSlider, modulesContentSlider, moduleContentSlides);
     prevOrNextMiniSlide(prevFeedSlider, nextFeedSlider, feedSlider, feedSlides, 1, 'feed__item-active');
   } else {
     createArrChildNodes(moduleapp);
