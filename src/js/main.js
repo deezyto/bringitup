@@ -24,6 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const modulesContentSliderTitle = modulesContentSlider.querySelectorAll('.card__title');
   const modulesContenSliderArrow = modulesContentSlider.querySelectorAll('.card__controls-arrow');
   const hanson = document.querySelector('.hanson');
+  const cardControls = modulesContentSlider.querySelectorAll('.card__controls');
+  const cardDescription = modulesContentSlider.querySelectorAll('.card__description');
+  const feedSlider = document.querySelector('.feed__slider');
+  const prevFeedSlider = feedSlider.querySelector('.slick-prev');
+  const nextFeedSlider = feedSlider.querySelector('.slick-next');
+
 
   slider.style.cssText = `display: flex;
   flex-wrap: wrap;
@@ -36,14 +42,24 @@ document.addEventListener('DOMContentLoaded', () => {
   align-items: flex-start;
   `;
 
+  feedSlider.style.cssText = `display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  align-items: flex-start;
+  `;
+
   const pages = [];
   const slides = [];
+  const feedSlides = [];
 
+  let i = 0;
   let player;
+  let autoNextSlide;
 
   function createArrChildNodes(selector, arr) {
+    console.log(selector.childNodes);
     for (let elem of selector.childNodes) {
-      if (elem.nodeName === '#text') {
+      if (elem.nodeName === '#text' || elem.nodeName === 'BUTTON') {
         continue;
       }
       //замінимо пробіли на точки
@@ -52,28 +68,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function hidePages(selector, arr) {
-    arr.forEach(elem => {
+  function hidePages(selector, arr, removeClass=0) {
+    
+    arr.forEach((elem, i) => {
       //selector.querySelector(`.${elem}`).classList.add('hide');
-      selector.querySelector(`.${elem}`).style.display = 'none';
+      if (removeClass) {
+        selector.querySelector(`.${elem}`).classList.remove(removeClass);
+      } else {
+        selector.querySelector(`.${elem}`).style.display = 'none';
+        modulesContentSliderTitle[i].style.cssText = 'transition: 0s all; opacity: 0.4;';
+        modulesContenSliderArrow[i].style.cssText = 'transition: 0s all; opacity: 0;';
+        cardControls[i].style.cssText = 'transition: 0s all; margin-top: 0;';
+        cardDescription[i].style.cssText = 'transition: 0s all; opacity: 0;';
+      }
+      
     });
   }
 
-  function showPage(selector, arr, number=0) {
+  function showPage(selector, arr, number=0, plusClass=0) {
     //selector.querySelector(`.${arr[number]}`).classList.remove('hide');
-    selector.querySelector(`.${arr[number]}`).style = 'display: block';
-    if (selector === slider) {
-      miniSlideTitle[number].style.opacity = '1';
-      miniSlideArrow[number].style.opacity = '1';
-      selector.querySelector(`.${arr[number + 1]}`).style = 'display: block';
-    } else if (selector === modulesContentSlider) {
-      console.log('ok');
-      modulesContentSliderTitle[number].style.opacity = '1';
-      modulesContenSliderArrow[number].style.opacity = '1';
-      selector.querySelector(`.${arr[number + 1]}`).style = 'display: block';
-      selector.querySelector(`.${arr[number + 2]}`).style = 'display: block';
-    }
-    viewHanson(number);
+    if (plusClass) {
+      selector.querySelector(`.${arr[number]}`).classList.add(plusClass);
+    } else {
+      selector.querySelector(`.${arr[number]}`).style = 'display: block';
+      modulesContentSliderTitle[0].style.opacity = '1';
+      if (selector === slider) {
+        miniSlideTitle[number].style.opacity = '1';
+        miniSlideArrow[number].style.opacity = '1';
+        selector.querySelector(`.${arr[number + 1]}`).style = 'display: block';
+      } else if (selector === modulesContentSlider) {
+        console.log('modulesContentSlider', number, modulesContentSliderTitle[0].style.opacity = '1');
+        modulesContentSliderTitle[0].style.opacity = '1';
+        modulesContentSliderTitle[number].style.opacity = '1';
+        modulesContenSliderArrow[number].style.opacity = '1';
+        cardControls[number].style = 'margin-top: -5em';
+        cardDescription[number].style.opacity = '1';
+        selector.querySelector(`.${arr[number + 1]}`).style = 'display: block';
+        selector.querySelector(`.${arr[number + 2]}`).style = 'display: block';
+      }
+  }
   }
 
   function clickLogo(selector, arr) {
@@ -97,46 +130,60 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function viewHanson(number) {
-    let i = 0;
+  function viewHanson(pageNumber) {
     hanson.style.display = 'none';
-    if (number === 2 && i < 1) {
+    if (pageNumber === 3) {
       setTimeout(() => {
         hanson.style.display = 'block';
       }, 3000);
-      i++;
     }
   }
 
+  function autoNextSlides(pageNumber) {
+    if (pageNumber === 3) {
+      autoNextSlide = setInterval(() => {
+        i += 2;
+        if (i === slides.length) {
+          i = 0;
+        }
+          
+        hidePages(modulesContentSlider, slides);
+        showPage(modulesContentSlider, slides, i);
+      }, 5000);
+    }
+  }
 
-  function prevOrNextMiniSlide(SelectorPrev, SelectorNext, slider, slides) {
-    let i = 0;
+  function prevOrNextMiniSlide(SelectorPrev, SelectorNext, slider, slides, stepI = 2, removeClass = 0) {
+
     SelectorPrev.addEventListener('click', () => {
       console.log('click');
+      console.log(slides, 'slides');
       //console.log(currentMiniSlide.textContent);
       if (i === 0) {
         i = slides.length;
       }
 
-      i -= 2;
-      hidePages(slider, slides);
-      showPage(slider, slides, i);
+      i -= stepI;
+      clearInterval(autoNextSlide);
+      hidePages(slider, slides, removeClass);
+      showPage(slider, slides, i, removeClass);
     });
 
     SelectorNext.addEventListener('click', () => {
       console.log('click');
-      //console.log(currentMiniSlide.textContent);
-      i += 2;
+      console.log(slides, 'slides.length');
+
+      i += stepI;
       if (i === slides.length) {
         i = 0;
       }
-      
-      hidePages(slider, slides);
-      showPage(slider, slides, i);
+
+      clearInterval(autoNextSlide);
+      hidePages(slider, slides, removeClass);
+      showPage(slider, slides, i, removeClass);
     });
+  
   }
-  prevOrNextMiniSlide(prevSlider, nextSlider, slider, slides);
-  prevOrNextMiniSlide(prevModulesContentSlider, nextModulesContentSlider, modulesContentSlider, slides);
 
   function prevOrNextSlide() {
     prevNextSlideModuleapp.forEach((elem, i) => {
@@ -183,10 +230,10 @@ document.addEventListener('DOMContentLoaded', () => {
   showVideo();
   closeModalWindow();
 
+
   function nextSlide(selector, arr) {
     nextSlideImg.forEach((elem, i) => {
       elem.addEventListener('click', () => {
-
         if (i === arr.length - 1) {
           hidePages(selector, arr);
           showPage(selector, arr, 0);
@@ -195,12 +242,14 @@ document.addEventListener('DOMContentLoaded', () => {
           showPage(selector, arr, +currentSlide[i].textContent);
           console.log('ok');
         }
+        viewHanson(+currentSlide[i].textContent + 1);
+        autoNextSlides(+currentSlide[i].textContent + 1);
 
       });
 
     });
 
-    }
+  }
 
   if (page) {
     createArrChildNodes(page, pages);
@@ -211,6 +260,12 @@ document.addEventListener('DOMContentLoaded', () => {
     showPage(slider, slides);
     clickLogo(page, pages);
     nextSlide(page, pages);
+    createArrChildNodes(feedSlider, feedSlides);
+    hidePages(feedSlider, feedSlides, 'feed__item-active');
+    showPage(feedSlider, feedSlides, 0, 'feed__item-active');
+    prevOrNextMiniSlide(prevSlider, nextSlider, slider, slides);
+    prevOrNextMiniSlide(prevModulesContentSlider, nextModulesContentSlider, modulesContentSlider, slides);
+    prevOrNextMiniSlide(prevFeedSlider, nextFeedSlider, feedSlider, feedSlides, 1, 'feed__item-active');
   } else {
     createArrChildNodes(moduleapp);
     hidePages(moduleapp);
