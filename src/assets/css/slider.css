@@ -9,3 +9,28 @@
 .module__info-controls {
     position: relative;
 }
+
+.showup__content-slider {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    align-items: flex-start;
+}
+
+.modules__content-slider {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    align-items: flex-start;
+}
+
+.feed__slider {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    align-items: flex-start;
+}
+
+.module__video {
+    height: 1000px;
+}
