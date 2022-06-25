@@ -2,10 +2,6 @@
     display: none;
 }
 
-.module__info-book {
-    display: none;
-}
-
 .module__info-controls {
     position: relative;
 }
@@ -33,4 +29,19 @@
 
 .module__video {
     height: 1000px;
+}
+
+.msg {
+    display: block;
+    height: 0;
+    visibility: hidden;
+    opacity: 0;
+    transition: .3s all;
+}
+
+.msg__show {
+    /* height: 100%; */
+    visibility: visible;
+    opacity: 1;
+    transition: .5s all;
 }

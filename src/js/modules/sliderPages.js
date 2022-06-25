@@ -1,63 +1,58 @@
 import {showContentTimeout} from './modal';
 import {createArrChildNodes} from './childNodes';
 
-export function hidePages(selector, arr, removeClass = 0) {
+export function hidePages({parentSelector, arr, title = 0, arrow = 0, removeClass = 0, sliderMini = 0, sliderMiniModules = 0, sliderFeed = 0}) {
         
     arr.forEach((elem, i) => {
-        selector.querySelector(`.${elem}`).style.display = 'none';
-    //selector.querySelector(`.${elem}`).classList.add('hide');
-    if (removeClass) {
-        selector.querySelector(`.${elem}`).classList.remove(removeClass);
-    } else if (selector) {
-        selector.querySelector(`.${elem}`).style.display = 'none';
-        //modulesContentSliderTitle[i].style.cssText = 'transition: 0s all; opacity: 0.4;';
-        //modulesContenSliderArrow[i].style.cssText = 'transition: 0s all; opacity: 0;';
-        //cardControls[i].style.cssText = 'transition: 0s all; margin-top: 0;';
-        //cardDescription[i].style.cssText = 'transition: 0s all; opacity: 0;';
-    } else {
-        selector.querySelector(`.${elem}`).style.display = 'none';
-    }
-    
+        if (removeClass) {
+            parentSelector.querySelector(`.${elem}`).classList.remove(removeClass);
+        } else if (sliderMini) {
+            parentSelector.querySelector(`.${elem}`).style.display = 'none';
+        } else if (sliderMiniModules) {
+
+            parentSelector.querySelector(`.${elem}`).style.display = 'none';
+            parentSelector.querySelectorAll(title)[i].style = 'transition: 0s all; opacity: 0.4';
+            parentSelector.querySelectorAll(arrow)[i].style.opacity = '0';
+            parentSelector.querySelectorAll('.card__controls')[i].style = 'transition: 0s all; margin-top: 0';
+            parentSelector.querySelectorAll('.card__description')[i].style = 'transition: 0s all; opacity: 0';
+        } else if (sliderFeed) {
+            //parentSelector.querySelector(`.${elem}`).style.display = 'none';
+        } else {
+            parentSelector.querySelector(`.${elem}`).style.display = 'none';
+        }
+   
     });
 }
 
-let array = [1,2,5];
+export function showPage({parentSelector, arr, number = 0, plusClass = 0, sliderMini = 0, sliderMiniModules = 0, sliderFeed = 0, title = 0, arrow = 0}) {
 
-function showContent(arr, number, option) {
-    
-    
-}
-console.log(showContent(array, 1, {one: 1, two: 2}));
-
-export function showPage(selector, arr, number = 0, plusClass = 0, sliderMini = 0, title = 0, arrow = 0, sliderMiniModules = 0) {
-    //selector.querySelector(`.${arr[number]}`).classList.remove('hide');
     if (plusClass) {
-    selector.querySelector(`.${arr[number]}`).classList.add(plusClass);
-    } else if (selector !== 'moduleapp') {
-        selector.querySelector(`.${arr[number]}`).style = 'display: block';
-        /*modulesContentSliderTitle[0].style.opacity = '1';
-        modulesContenSliderArrow[0].style.opacity = '1';
-        cardControls[0].style = 'margin-top: -5em';
-        cardDescription[0].style.opacity = '1'; */
-    if (sliderMini) {
-        title[number].style.opacity = '1';
-        arrow[number].style.opacity = '1';
-        console.log(arr.number, 'show');
-        selector.querySelector(`.${arr[number + 1]}`).style = 'display: block';
+        document.querySelector(`.${arr[number]}`).classList.add(plusClass);
+    } else if (sliderMini) {
+        document.querySelectorAll(title)[number].style.opacity = '1';
+        document.querySelectorAll(arrow)[number].style.opacity = '1';
+
+        parentSelector.querySelector(`.${arr[number]}`).style = 'display: block';
+        parentSelector.querySelector(`.${arr[number + 1]}`).style = 'display: block';
+        
     } else if (sliderMiniModules) {
-        /* modulesContentSliderTitle[number].style.opacity = '1';
-        modulesContenSliderArrow[number].style.opacity = '1';
-        cardControls[number].style = 'margin-top: -5em';
-        cardDescription[number].style.opacity = '1'; */
-        selector.querySelector(`.${arr[number + 1]}`).style = 'display: block';
-        selector.querySelector(`.${arr[number + 2]}`).style = 'display: block';
+        parentSelector.querySelectorAll(title)[number].style = 'transition: .5s all; opacity: 1';
+        parentSelector.querySelectorAll(arrow)[number].style.opacity = '1';
+        parentSelector.querySelectorAll('.card__controls')[number].style = 'transition: .5s all; margin-top: -5em';
+        parentSelector.querySelectorAll('.card__description')[number].style = 'transition: .5s all; opacity: 1';
+
+        parentSelector.querySelector(`.${arr[number]}`).style = 'display: block';
+        parentSelector.querySelector(`.${arr[number + 1]}`).style = 'display: block';
+        parentSelector.querySelector(`.${arr[number + 2]}`).style = 'display: block';
+    } else if (sliderFeed) {
+        //parentSelector.querySelector(`.${arr[number]}`).style = 'display: block';
     } else {
-        selector.querySelector(`.${arr[number]}`).style = 'display: block';
-    }
+        //parentSelector.querySelector(`.${arr[number]}`).style = 'display: block';
+        parentSelector.querySelector(`.${arr[number]}`).style = 'display: block';
     }
 }
 
-function sliderPage({parentSelector, logoSelector, arrName, buttonNextSelector, currentSlide, selectorShowTimeout}) {
+function sliderPage({parentSelector, logoSelector, buttonNextSelector, currentSlide, selectorShowTimeout = 0}) {
 
     const parent = document.querySelector(parentSelector);
     const logo = document.querySelectorAll(logoSelector);
@@ -70,36 +65,28 @@ function sliderPage({parentSelector, logoSelector, arrName, buttonNextSelector, 
         logo.forEach(elem => {
         elem.addEventListener('click', () => {
             console.log('click');
-            hidePages(parent, childNodesArray);
-            showPage(parent, childNodesArray, 0);
+            hidePages({parentSelector: parent, arr: childNodesArray});
+            showPage({parentSelector: parent, arr: childNodesArray});
         });
         });
     }
 
-
-    /* function prevOrNextSlide() {
-        buttonNext.forEach((elem, i) => {
-        elem.addEventListener('click', () => {
-            hidePages(parent);
-            showPage(parent, childNodesArray, +slide[i].textContent - 1);
-        });
-        });
-    }
-    prevOrNextSlide(); */
 
     function nextSlide() {
         buttonNext.forEach((elem, i) => {
         elem.addEventListener('click', () => {
             if (i === childNodesArray.length - 1) {
-            hidePages(parent, childNodesArray);
-            showPage(parent, childNodesArray, 0);
+            hidePages({parentSelector: parent, arr: childNodesArray});
+            showPage({parentSelector: parent, arr: childNodesArray});
             } else {
-            hidePages(parent, childNodesArray);
-            showPage(parent, childNodesArray, +slide[i].textContent);
+            hidePages({parentSelector: parent, arr: childNodesArray});
+            showPage({parentSelector: parent, arr: childNodesArray, number: +slide[i].textContent});
+
             console.log('ok');
             }
-            showContentTimeout(selectorShowTimeout, +slide[i].textContent + 1);
-            //autoNextSlides(+currentSlide[i].textContent + 1);
+            if (selectorShowTimeout) {
+                showContentTimeout(selectorShowTimeout, +slide[i].textContent + 1);
+            }
 
         });
 
@@ -107,10 +94,12 @@ function sliderPage({parentSelector, logoSelector, arrName, buttonNextSelector, 
 
     }
 
-  hidePages(parent, childNodesArray);
-  showPage(parent, childNodesArray);
+  hidePages({parentSelector: parent, arr: childNodesArray});
+  showPage({parentSelector: parent, arr: childNodesArray});
   clickLogo();
   nextSlide();
+
+  
 
 }
 

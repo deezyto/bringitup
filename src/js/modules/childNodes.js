@@ -1,6 +1,6 @@
 export function createArrChildNodes(parentSelector) {
 
-    console.log(parentSelector.childNodes);
+    //console.log(parentSelector.childNodes);
     const childNodesArray = [];
 
     for (let elem of parentSelector.childNodes) {

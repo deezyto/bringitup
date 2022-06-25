@@ -14,48 +14,76 @@ function video ({buttonPlayClass, buttonCloseModalClass, modalClass, videoId, fr
         frame.append(script);
     }
     createIframe(frame);
+    
 
     function onYouTubeIframeAPIReady(url) {
-    player = new YT.Player('frame', {
+      player = new YT.Player('frame', {
         height: '100%',
         width: '100%',
         videoId: url,
         playerVars: {
-        'playsinline': 1
+        'autoplay': 1,
+        //'playsinline': 1
         },
         events: {
         'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange
         }
     });
     }
 
-    function onPlayerReady(event) {
-    event.target.playVideo();
-    }
+    function onPlayerStateChange(event) {
+      /* if (event.data == 2) {
+        try {
+        player.pauseVideo();
+      } catch {
+      }
+    } */
+    } 
 
+    function onPlayerReady(event) {
+      event.target.playVideo();
+      /* if (event.data == 2) {
+        try {
+        player.playVideo();
+      } catch {
+      }
+    } */
+      
+    }
+//коли нажимаю play відео відтворюється
+//коли закриваю модальне вікно відео ставиться на паузу
+//коли знову відтворюю і закриваю модальне вікно
+//відео відтворюється а не ставиться на паузу
+//потрібно в event записувати паузу відео
     function showVideo() {
         button.forEach(elem => {
-        elem.addEventListener('click', (e) => {
-        modal.style.display = 'flex';
-        onYouTubeIframeAPIReady(video.getAttribute('data-url'));
+          elem.addEventListener('click', (e) => {
+          modal.style.display = 'flex';
+          try {
+            player.playVideo();
+          } catch {
+            onYouTubeIframeAPIReady(video.getAttribute('data-url'));
+          }
         });
-    });
+      });
     }
+
     showVideo();
 
     function closeModalWindow() {
-        close.addEventListener('click', () => {
-
-          try {
-            player.stopVideo();
-          } catch (e) {
-            console.log(e);
-          }
+        close.addEventListener('click', (e) => {
           modal.style.display = 'none';
+          console.log('modal');
+          try {
+            player.pauseVideo();
+          } catch {
+          
+          }
         });
-      }
+    }
     
     closeModalWindow();
-}
+  }
 
 export default video;
