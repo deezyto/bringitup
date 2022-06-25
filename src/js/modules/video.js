@@ -4,7 +4,7 @@ function video ({buttonPlayClass, buttonCloseModalClass, modalClass, videoId, fr
 
     const button = document.querySelectorAll(buttonPlayClass);
     const modal = document.querySelector(modalClass);
-    const video = document.querySelector(videoId);
+    const video = document.querySelectorAll(videoId);
     const frame = document.querySelector(frameId);
     const close = document.querySelector(buttonCloseModalClass);
     
@@ -56,13 +56,13 @@ function video ({buttonPlayClass, buttonCloseModalClass, modalClass, videoId, fr
 //відео відтворюється а не ставиться на паузу
 //потрібно в event записувати паузу відео
     function showVideo() {
-        button.forEach(elem => {
+        button.forEach((elem, i) => {
           elem.addEventListener('click', (e) => {
           modal.style.display = 'flex';
           try {
             player.playVideo();
           } catch {
-            onYouTubeIframeAPIReady(video.getAttribute('data-url'));
+            onYouTubeIframeAPIReady(video[i].getAttribute('data-url'));
           }
         });
       });
