@@ -15,11 +15,11 @@ function video ({buttonPlayClass, buttonCloseModalClass, modalClass, videoId, fr
     }
     createIframe(frame);
     
-    function onYouTubeIframeAPIReady(url) {
+    function onYouTubeIframeAPIReady(videoId) {
       player = new YT.Player('frame', {
         height: '100%',
         width: '100%',
-        videoId: url,
+        videoId: videoId,
         playerVars: {
         'autoplay': 1,
         //'playsinline': 1
@@ -50,20 +50,43 @@ function video ({buttonPlayClass, buttonCloseModalClass, modalClass, videoId, fr
     } */
       
     }
-//коли нажимаю play відео відтворюється
-//коли закриваю модальне вікно відео ставиться на паузу
-//коли знову відтворюю і закриваю модальне вікно
-//відео відтворюється а не ставиться на паузу
-//потрібно в event записувати паузу відео
+//якщо клікнули на кнопку ту саму то відтворити відео
+//якщо на інакшу то видалити попереднє і відтворити нове
+let firstVideo = '';
+let nextVideo = '';
     function showVideo() {
+      
         button.forEach((elem, i) => {
           elem.addEventListener('click', (e) => {
+            console.log(elem, i);
+          
           modal.style.display = 'flex';
-          try {
+          console.log(video[i].getAttribute('data-url'));
+          nextVideo = video[i].getAttribute('data-url');
+          if (firstVideo && nextVideo && firstVideo === nextVideo) {
             player.playVideo();
-          } catch {
-            onYouTubeIframeAPIReady(video[i].getAttribute('data-url'));
+            console.log(firstVideo, nextVideo, 'if');
+          } else if (!firstVideo) {
+            firstVideo = video[i].getAttribute('data-url');
+            onYouTubeIframeAPIReady(firstVideo);
+            console.log(firstVideo, nextVideo, 'else if');
+          } else if (firstVideo !== nextVideo) {
+            firstVideo = nextVideo;
+            onYouTubeIframeAPIReady(nextVideo);
+            nextVideo = '';
+            console.log(firstVideo, nextVideo, 'else if 1');
           }
+          
+
+          try {
+            //player.playVideo();
+            
+
+          } catch {
+            //onYouTubeIframeAPIReady(video[i].getAttribute('data-url'));
+            
+            }
+          
         });
       });
     }
