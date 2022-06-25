@@ -15,7 +15,6 @@ function video ({buttonPlayClass, buttonCloseModalClass, modalClass, videoId, fr
     }
     createIframe(frame);
     
-
     function onYouTubeIframeAPIReady(url) {
       player = new YT.Player('frame', {
         height: '100%',
