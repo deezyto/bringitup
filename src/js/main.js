@@ -2,6 +2,7 @@
 import video from './modules/video';
 import sliderPage from './modules/sliderPages';
 import sliderMini from './modules/sliderMini';
+import showContent from './modules/content';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -90,4 +91,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   } catch {
   }
+
+  try {
+    showContent({
+      parentSelector: '.difference__info-cards',
+      button: '.plus'
+    });
+    } catch (e) {
+      console.log(e, 'showContent');
+    }
 });

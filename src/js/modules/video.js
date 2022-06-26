@@ -1,6 +1,6 @@
 
 function video ({buttonPlayClass, buttonCloseModalClass, modalClass, videoId, frameId}) {
-    let player;
+  let player;
 
     const button = document.querySelectorAll(buttonPlayClass);
     const modal = document.querySelector(modalClass);
@@ -11,17 +11,24 @@ function video ({buttonPlayClass, buttonCloseModalClass, modalClass, videoId, fr
     function createIframe(frame) {
         let script = document.createElement('script');
         script.src = "https://www.youtube.com/iframe_api";
-        frame.append(script);
+        let firstScriptTag = document.querySelectorAll('script')[0];
+        firstScriptTag.parentNode.insertBefore(script, firstScriptTag);
+
+        //frame.append(script);
+        //script.src = "https://www.youtube.com/iframe_api";
+        //let firstScriptTag = document.getElementsByTagName('script')[0];
+        //firstScriptTag.parentNode.insertBefore(script, firstScriptTag);
     }
     createIframe(frame);
     
+
     function onYouTubeIframeAPIReady(videoId) {
       player = new YT.Player('frame', {
         height: '100%',
         width: '100%',
         videoId: videoId,
         playerVars: {
-        'autoplay': 1,
+        'autoplay': 1
         //'playsinline': 1
         },
         events: {
@@ -30,62 +37,62 @@ function video ({buttonPlayClass, buttonCloseModalClass, modalClass, videoId, fr
         }
     });
     }
+    
+    
 
     function onPlayerStateChange(event) {
-      /* if (event.data == 2) {
-        try {
-        player.pauseVideo();
-      } catch {
-      }
-    } */
+      showVideo();
     } 
+    
 
     function onPlayerReady(event) {
-      event.target.playVideo();
-      /* if (event.data == 2) {
-        try {
+
+      /* try {
         player.playVideo();
       } catch {
-      }
-    } */
-      
+        
+      } */
+
     }
+
+
 //якщо клікнули на кнопку ту саму то відтворити відео
 //якщо на інакшу то видалити попереднє і відтворити нове
-let firstVideo = '';
-let nextVideo = '';
+
     function showVideo() {
+      let firstVideo = '';
+      let nextVideo = '';
       
         button.forEach((elem, i) => {
-          elem.addEventListener('click', (e) => {
-            console.log(elem, i);
+          elem.addEventListener('click', () => {
           
           modal.style.display = 'flex';
-          console.log(video[i].getAttribute('data-url'));
-          nextVideo = video[i].getAttribute('data-url');
-          if (firstVideo && nextVideo && firstVideo === nextVideo) {
-            player.playVideo();
-            console.log(firstVideo, nextVideo, 'if');
-          } else if (!firstVideo) {
-            firstVideo = video[i].getAttribute('data-url');
+          firstVideo = video[i].getAttribute('data-url');
+          console.log(player);
+          if (!player) {
             onYouTubeIframeAPIReady(firstVideo);
-            console.log(firstVideo, nextVideo, 'else if');
-          } else if (firstVideo !== nextVideo) {
-            firstVideo = nextVideo;
-            onYouTubeIframeAPIReady(nextVideo);
-            nextVideo = '';
-            console.log(firstVideo, nextVideo, 'else if 1');
           }
           
+          if (firstVideo && nextVideo && firstVideo === nextVideo) {
 
-          try {
-            //player.playVideo();
-            
+            try {
+              player.playVideo();
+            } catch {
 
-          } catch {
-            //onYouTubeIframeAPIReady(video[i].getAttribute('data-url'));
-            
             }
+          } else if (!nextVideo) {
+            nextVideo = video[i].getAttribute('data-url');
+          } else if (firstVideo !== nextVideo && firstVideo && nextVideo) {
+            
+            try {
+              player.loadVideoById({videoId: firstVideo});
+            } catch {
+              
+            }
+            firstVideo = '';
+            nextVideo = '';
+            
+          }
           
         });
       });

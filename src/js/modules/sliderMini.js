@@ -117,6 +117,7 @@ function prevOrNextMiniSlide({parentSelector, selectorPrev, selectorNext, curren
   
   });
 
+//показує текст при натисканні на кнопку з анімацією
   function showHideContent() {
     childNodesArray.forEach((elem, i) => {
       document.querySelector(`.${elem}`).querySelector('.plus').addEventListener('click', () => {
