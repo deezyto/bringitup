@@ -95,7 +95,6 @@ function video ({classVideo,
     
   } 
   
-
   function onPlayerReady(event) {
 
   }
@@ -151,7 +150,6 @@ function video ({classVideo,
   function closeModalWindow() {
       close.addEventListener('click', (e) => {
         modal.style.display = 'none';
-
         try {
           player.pauseVideo();
         } catch {
