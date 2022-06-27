@@ -7,12 +7,18 @@ import showContent from './modules/content';
 document.addEventListener('DOMContentLoaded', () => {
 
   video({
+    classVideo: '.module__video-item',
     buttonPlayClass: '.play__circle', 
     buttonCloseModalClass: '.close', 
     modalClass: '.overlay', 
-    videoId: '.play', 
-    frameId: '#frame'
+    classVideoIdAttribute: '.play', 
+    attributeVideoId: 'data-url',
+    frameId: 'frame',
+    videoPlayText: '.play__text',
+    videoBlockAttribute: 'data-videoBlock',
+    blockVideoMode: 'low'
    });
+
 
   try {
   sliderPage ({
