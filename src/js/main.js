@@ -7,7 +7,7 @@ import showContent from './modules/content';
 document.addEventListener('DOMContentLoaded', () => {
 
   video({
-    classVideo: '.module__video-item',
+    classVideo: ['.module__video-item', '.showup__video'],
     buttonPlayClass: '.play__circle', 
     buttonCloseModalClass: '.close', 
     modalClass: '.overlay', 

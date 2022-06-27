@@ -1,7 +1,7 @@
 
 function video ({classVideo, 
   buttonPlayClass, buttonCloseModalClass, modalClass, classVideoIdAttribute, attributeVideoId, 
-  frameId, videoPlayText, videoBlockAttribute = 'videoBlockAttribute', blockVideoMode = 'low'}) {
+  frameId, videoPlayText, videoBlockAttribute = 'data-videoBlock', blockVideoMode = 'low'}) {
 
   let player;
   let videoNumber = 0;
@@ -55,7 +55,11 @@ function video ({classVideo,
     });
   }
 
-  setVideoBlockAttribute();
+  try {
+    setVideoBlockAttribute();
+  } catch {
+    console.log('dont can set attribute in this page');
+  }
 
   function updateVideoStileForVideoViewHostory() {
     for (let i = 0; i < button.length - 1; i++) {
