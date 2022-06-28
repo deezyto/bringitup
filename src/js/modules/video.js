@@ -1,6 +1,5 @@
 
-function video ({classVideo, 
-  buttonPlayClass, buttonCloseModalClass, modalClass, classVideoIdAttribute, attributeVideoId, 
+function video ({classVideo, buttonPlayClass, buttonCloseModalClass, modalClass, classVideoIdAttribute, attributeVideoId, 
   frameId, videoPlayText, videoBlockAttribute = 'data-videoBlock', blockVideoMode = 'low'}) {
 
   let player;
@@ -19,6 +18,7 @@ function video ({classVideo,
     let firstScriptTag = document.querySelectorAll('script')[0];
     firstScriptTag.parentNode.insertBefore(script, firstScriptTag);
   }
+
   createIframe();
   
 
@@ -39,6 +39,7 @@ function video ({classVideo,
 
   function setVideoViewHistoryInLocalStorage(videoId, videoNumber = 0, set = 0) {
     const getVideo = localStorage.getItem(videoId);
+    
     if (!getVideo && set) {
       localStorage.setItem(videoId, 'unlock');
       setStyleAfterUnlockVideo(videoNumber);
@@ -83,7 +84,7 @@ function video ({classVideo,
   }
 
   function onPlayerStateChange(event) {
-    if (event.data !== -1) {
+    if (event.data === 2) {
       showVideo();
     }
 
@@ -100,7 +101,6 @@ function video ({classVideo,
   } 
   
   function onPlayerReady(event) {
-
   }
 
   function showVideo() {
@@ -109,7 +109,7 @@ function video ({classVideo,
     
     button.forEach((elem, i) => {
         
-      elem.addEventListener('click', (e) => {
+      elem.addEventListener('click', () => {
 
         if (!video[i].getAttribute(videoBlockAttribute) || video[i].getAttribute(videoBlockAttribute) === 'false') {
     
@@ -139,6 +139,7 @@ function video ({classVideo,
           } catch {
             player.stopVideo();
           }
+
           firstVideo = '';
           nextVideo = '';
           
@@ -152,7 +153,7 @@ function video ({classVideo,
   showVideo();
 
   function closeModalWindow() {
-      close.addEventListener('click', (e) => {
+      close.addEventListener('click', () => {
         modal.style.display = 'none';
         try {
           player.pauseVideo();
@@ -163,6 +164,7 @@ function video ({classVideo,
   }
   
   closeModalWindow();
+
 }
 
 export default video;
