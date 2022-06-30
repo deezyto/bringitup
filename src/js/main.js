@@ -3,6 +3,7 @@ import video from './modules/video';
 import sliderPage from './modules/sliderPages';
 import sliderMini from './modules/sliderMini';
 import showContent from './modules/content';
+import sendForm from './services/forms';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -106,4 +107,13 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) {
       console.log(e, 'showContent');
     }
+
+  try {
+    sendForm({
+      formParentSelector: '.join__evolution'
+    });
+  } catch {
+
+  }
+
 });

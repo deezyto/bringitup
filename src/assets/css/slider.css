@@ -91,3 +91,8 @@
 .module__info {
     transform: scale(.8 ) translate(-10%, -10%);
 } */
+
+.join__evolution .form__block div input:focus {
+    background-color: rgba(216,216,216,.3);
+    color: white;
+}
