@@ -97,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     stepI: 1
   });
   } catch {
+
   }
 
   try {
@@ -121,10 +122,14 @@ document.addEventListener('DOMContentLoaded', () => {
   try {
     sendForm({
       formId: 1,
-      style: 1
+      parentNode: 2,
+      style: 2
     });
   } catch {
 
   }
 
+
+
+  
 });

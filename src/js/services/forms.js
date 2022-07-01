@@ -49,8 +49,8 @@ const postData = async (url, data) => {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       console.log('form submit');
-      console.log(form, 'form item')
-      formMassage(message.loading, form);
+      console.log(form, 'form item');
+      formMessage(message.loading, form);
 
       const formData = new FormData(form);
       
@@ -66,16 +66,15 @@ const postData = async (url, data) => {
 
       .then(data => {
         console.log(data, 'ok');
-        formMassage(message.success, form, 0, 1);
+        formMessage({message: message.success, form: form, style: 1});
 
       })
       .catch((e) => {
         console.log(e, 'dont ok');
-        formMassage(message.failure, form, 0, 1);
+        formMessage({message: message.failure, form: form, style: 1});
 
       })
       .finally(() => {
-
         form.reset();
       });
 
@@ -83,47 +82,67 @@ const postData = async (url, data) => {
   }
 
 
-function formMassage(message, form, parentNode = 0, style=0) {
+function formMessage({message = '', form = '', parentNode = 0, style = 0, deleteMessage = 0}) {
   let selector = document.querySelector('.message');
 
-  if (!selector) {
-    const element = document.createElement('div');
-    element.classList.add('message');
-    if (style === 1) {
-      element.style.cssText = `
-      display: inline-block;
-      padding: 22px 24px 23px 24px;
-      border-radius: 4px;
-      background: white;
-      font-size: 16px;
-      margin-top: 30px;`;
-    } else {
-      element.style.cssText = `
-      display: block;
-      margin-top: 20px;
-      padding: 5px;
-      color: black;`;
-    }
-    
-    if (parentNode === 1) {
-      form.parentNode.parentNode.appendChild(element);
-    } else if (parentNode === 2) {
-      form.parentNode.parentNode.parentNode.appendChild(element);
-    } else {
-      form.parentNode.appendChild(element);
+    if (selector && deleteMessage) {
+        selector.remove();
     }
 
-    selector = document.querySelector('.message');
+    if (!selector) {
+      const element = document.createElement('div');
+
+      element.classList.add('message');
+      if (style === 1) {
+        element.style.cssText = `
+        display: inline-block;
+        padding: 22px 24px 23px 24px;
+        border-radius: 4px;
+        background: white;
+        font-size: 16px;
+        margin-top: 30px;`;
+      } else if (style === 2) {
+          element.style.cssText = `
+          display: inline-block;
+          padding: 22px 24px 23px 24px;
+          opacity: .5;
+          border-radius: 4px;
+          background-color: #2546bc;
+          font-size: 16px;
+          color: white;
+          margin-top: 30px;`;
+      } else {
+        element.style.cssText = `
+        display: block;
+        margin-top: 20px;
+        padding: 5px;
+        color: black;`;
+      }
+      
+      try {
+        if (parentNode === 1) {
+          form.parentNode.parentNode.appendChild(element);
+        } else if (parentNode === 2) {
+          form.parentNode.parentNode.parentNode.appendChild(element);
+        } else {
+          form.parentNode.appendChild(element);
+        }
+
+        selector = document.querySelector('.message');
+      
+        selector.textContent = message;
+
+        setTimeout(() => {
+          selector.remove();
+        }, 5000);
+      } catch {
+
+      }
     
-    selector.textContent = message;
-  
-    setTimeout(() => {
-      selector.remove();
-    }, 50000000);
-  } else {
-      selector.remove();
-      formMassage(message, form, parentNode, style);
-  }
+    } /* else {
+        selector.remove();
+        formMessage(message, form, parentNode, style);
+    } */
 
 }
 
@@ -187,7 +206,7 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
   //const submit = document.querySelectorAll('form button');
 
   const formMessages = {
-    text: 'You must enter more than 1 character',
+    text: 'You must enter more than 1 letter character',
     email: 'Please enter correct email: name@site.com',
     phone: 'Please enter correct phone: +1 234 375 250'
   };
@@ -208,29 +227,84 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
 
       elem.addEventListener('input', (e) => {
         elem.setCustomValidity('');
-        if (elem.type === 'text') {
-          const textRegular = /[^a-zA-Z]/g;
+        if (elem.type === 'text' && elem.id !== 'phone') {
+          const textRegular = /[^a-z]/ig;
 
           if (textRegular.test(elem.value)) {
-            formMassage(formMessages.text, elem, parentNode, style);
+            formMessage({message: formMessages.text, form: elem, parentNode: parentNode, style: style});
+          } else {
+            formMessage({deleteMessage: 1});
           }
+          
+          /* if (textRegular.test(elem.value) === 'false') {
+            const selector = document.querySelector('.message');
+            selector.remove();
+            //formMassage({message: formMessages.text, form: elem, parentNode: parentNode, style: style, deleteMessage: 1});
+          } */
+
+          /* if (!textRegular.test(elem.value)) {
+            formMessage({deleteMessage: 1});
+          } */
 
           elem.value = elem.value.replace(textRegular, '');
 
         } else if (elem.type === 'email') {
-          const emailRegular = /[^a-zA-Z0-9@.]/g;
+          const emailRegular = /[^a-z0-9@.]/ig;
 
           if (emailRegular.test(elem.value)) {
-            formMassage(formMessages.email, elem, parentNode, style);
+            formMessage({message: formMessages.text, form: elem, parentNode: parentNode, style: style});
+          } else {
+            formMessage({deleteMessage: 1});
           }
 
           elem.value = elem.value.replace(emailRegular, '');
 
         } else if (elem.id === 'phone') {
+          //const phoneRegular = /^[\+]?[(]?[2-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/ig;
+          //const telephone = '+3 (809) - 393 - 393j';
+          //^(?:\d{3}|\(\d{3}\))([-\/\.])\d{3}\1\d{4}$/;
+          //^ початок рядка даних
+          //(?:\d{3}|
+          const phoneRegular = /^\+?1?(?:\d{3}|\(\d{3}\))([-\/\.])\d{3}\1\d{4}$/;
+
+          const telephone = '+1250-353-4804';
+          const test = 'j';
+          console.log(phoneRegular.exec(telephone));
+
+
+          let count = 0;
+
+          for (let i = 0; i < telephone.length - 3; i++) {
+            if (telephone[0] === '+') {
+              count++;
+            } else if (telephone[1] === '1') {
+              count++;
+            } else if (telephone[2] === '3') {
+
+            }
+
+
+          }
+
+          const regular = /\+1/ig;
+          const teststr = '0+1';
+          //перша цифра 1
+          //перша цифра із трьох починається з цифри 2
+          //цифр 10
+          //із трьох цифр можуть повторюватись максимум 2
+
+          console.log(teststr.search(regular));
+
+
+          if (phoneRegular.test(elem.value)) {
+            formMessage({message: formMessages.text, form: elem, parentNode: parentNode, style: style});
+          } else {
+            formMessage({deleteMessage: 1});
+          }
 
           mask('[name="phone"]');
 
-          let phone = /^[\+]?[(]?[2-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(elem.value);     
+          phoneRegular.test(elem.value);     
         }
 
       });
