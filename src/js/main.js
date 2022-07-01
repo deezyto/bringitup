@@ -110,7 +110,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   try {
     sendForm({
-      formParentSelector: '.join__evolution'
+      formInputs: ['input', 'select'],
+      parentNode: 2,
+      style: 1
+    });
+  } catch {
+
+  }
+
+  try {
+    sendForm({
+      formId: 1,
+      style: 1
     });
   } catch {
 

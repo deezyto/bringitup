@@ -96,3 +96,19 @@
     background-color: rgba(216,216,216,.3);
     color: white;
 }
+
+* {
+    overflow: auto;
+}
+  
+.join__evolution .form__block div input:invalid {
+    border: 1px solid;
+}
+
+.schedule__form .form__item input:invalid {
+    border: 1px solid blue;
+}
+
+.join__evolution .form__block div input:valid, .schedule__form .form__item input:valid {
+    border: none;
+}
