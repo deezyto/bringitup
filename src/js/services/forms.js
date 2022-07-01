@@ -232,16 +232,6 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
           } else {
             formMessage({deleteMessage: 1});
           }
-          
-          /* if (textRegular.test(elem.value) === 'false') {
-            const selector = document.querySelector('.message');
-            selector.remove();
-            //formMassage({message: formMessages.text, form: elem, parentNode: parentNode, style: style, deleteMessage: 1});
-          } */
-
-          /* if (!textRegular.test(elem.value)) {
-            formMessage({deleteMessage: 1});
-          } */
 
           elem.value = elem.value.replace(textRegular, '');
 
@@ -268,8 +258,7 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
           const test = 'j';
           console.log(phoneRegular.exec(telephone));
 
-
-          let count = 0;
+          /* let count = 0;
 
           for (let i = 0; i < telephone.length - 3; i++) {
             if (telephone[0] === '+') {
@@ -280,17 +269,7 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
 
             }
 
-
-          }
-
-          const regular = /\+1/ig;
-          const teststr = '0+1';
-          //перша цифра 1
-          //перша цифра із трьох починається з цифри 2
-          //цифр 10
-          //із трьох цифр можуть повторюватись максимум 2
-
-          console.log(teststr.search(regular));
+          } */
 
 
           if (phoneRegular.test(elem.value)) {
@@ -307,10 +286,6 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
       });
 
   });
-
-  /* if (verify && item && verify === item) {
-    getForm(forms);
-  } */
 
 }
 
