@@ -102,15 +102,15 @@ function formMessage({message = '', form = '', parentNode = 0, style = 0, delete
         font-size: 16px;
         margin-top: 30px;`;
       } else if (style === 2) {
-          element.style.cssText = `
-          display: inline-block;
-          padding: 22px 24px 23px 24px;
-          opacity: .5;
-          border-radius: 4px;
-          background-color: #2546bc;
-          font-size: 16px;
-          color: white;
-          margin-top: 30px;`;
+        element.style.cssText = `
+        display: inline-block;
+        padding: 22px 24px 23px 24px;
+        opacity: .5;
+        border-radius: 4px;
+        background-color: #2546bc;
+        font-size: 16px;
+        color: white;
+        margin-top: 30px;`;
       } else {
         element.style.cssText = `
         display: block;
@@ -139,10 +139,7 @@ function formMessage({message = '', form = '', parentNode = 0, style = 0, delete
 
       }
     
-    } /* else {
-        selector.remove();
-        formMessage(message, form, parentNode, style);
-    } */
+    }
 
 }
 
