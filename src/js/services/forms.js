@@ -167,7 +167,6 @@ const mask = (selector) => {
 
     let def = matrix.replace(/\D/g, '');
 
-
     let val = this.value.replace(/\D/g, '');
 
     if (def.length >= val.length) {
@@ -175,7 +174,16 @@ const mask = (selector) => {
     }
     
     this.value = matrix.replace(/./g, function(a) {
-      return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i >= val.length ? '' : a;
+
+      if (/[_\d]/.test(a) && i < val.length) {
+        return val.charAt(i++);
+      } else if (i >= val.length) {
+        return '';
+      } else {
+        return a;
+      }
+
+      //return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i >= val.length ? '' : a;
     });
 
     if (event.type === 'blur') {
@@ -208,19 +216,9 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
     phone: 'Please enter correct phone: +1 234 375 250'
   };
 
+  let template = '+1 (___) ___ ____';
+  
   input.forEach((elem, i) => {
-      /* function CustomValidity() {
-        if (elem.value.length < 1) {
-          if (elem.type === 'text') {
-            elem.setCustomValidity(formMessages.text);
-          } else if (elem.type === 'email') {
-            elem.setCustomValidity(formMessages.email);
-          }
-        } else {
-          elem.setCustomValidity('');
-        }
-      }
-      CustomValidity(); */
 
       elem.addEventListener('input', (e) => {
         elem.setCustomValidity('');
@@ -247,42 +245,54 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
           elem.value = elem.value.replace(emailRegular, '');
 
         } else if (elem.id === 'phone') {
-          //const phoneRegular = /^[\+]?[(]?[2-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/ig;
-          //const telephone = '+3 (809) - 393 - 393j';
-          //^(?:\d{3}|\(\d{3}\))([-\/\.])\d{3}\1\d{4}$/;
-          //^ початок рядка даних
-          //(?:\d{3}|
-          const phoneRegular = /^\+?1?(?:\d{3}|\(\d{3}\))([-\/\.])\d{3}\1\d{4}$/;
 
-          const telephone = '+1250-353-4804';
-          const test = 'j';
-          console.log(phoneRegular.exec(telephone));
-
-          /* let count = 0;
-
-          for (let i = 0; i < telephone.length - 3; i++) {
-            if (telephone[0] === '+') {
-              count++;
-            } else if (telephone[1] === '1') {
-              count++;
-            } else if (telephone[2] === '3') {
-
-            }
-
-          } */
+        
+          //usa номер складається з +1 NXX NXX XXXX
+          //де n - номер від 2 до 9
+          //x число від 0 до 9, але не може бути xx 11
+          //xxxx - можуть бути любі цифри
+          //на єтапі ввода користувачем номера, якщо він ввів
+          //цифру не правильно, потрібно зупинити ввід наступної
+          //цифри і повідомити про це відповідним текстом і
+          //виділити неправильну цифру в input
+          
+          //можна кожен раз коли користувач вводить цифру
+          //якщо довжина elem.value менше ніж потрібна дописувати
+          //правильні цифри і перевіряти регулярним виразом
 
 
-          if (phoneRegular.test(elem.value)) {
+          mask('[name="phone"]');
+          console.log(elem.value, 'elem.value', elem.value.length, 'elem.length');
+          
+          if (elem.value.length === 1 && +elem.value.slice(0, 1) !== 1) {
+            elem.value = elem.value.replace(/[^1]/i, '+1');
+            
+          } else if (elem.value.length > 3 && +elem.value.slice(3, 4) < 2) {
+            console.log('elem value 0 2-9', elem.value.slice(0, 3) );
             formMessage({message: formMessages.text, form: elem, parentNode: parentNode, style: style});
+            elem.value = elem.value.slice(0, 3);
+
+          } else if (elem.value.length === 9 && +elem.value.slice(8, 9) < 2) {
+            console.log('elem value 4 2-9');
+            formMessage({message: formMessages.text, form: elem, parentNode: parentNode, style: style});
+            elem.value = elem.value.slice(0, 8);
+
+          } else if (elem.value.length === 6 && +elem.value.slice(4, 5) === 1 && elem.value.length === 6 && +elem.value.slice(5, 6) === 1) {
+            console.log('elem value 2-3 dont 11');
+            formMessage({message: formMessages.text, form: elem, parentNode: parentNode, style: style});
+            elem.value = elem.value.slice(0, 5);
+
+          } else if (elem.value.length === 11 && +elem.value.slice(9, 10) === 1 && elem.value.length === 11 && +elem.value.slice(10, 11) === 1) {
+            console.log('elem value 5-6 dont 11 ');
+            formMessage({message: formMessages.text, form: elem, parentNode: parentNode, style: style});
+            elem.value = elem.value.slice(0, 10);
+
           } else {
             formMessage({deleteMessage: 1});
           }
+        
 
-          mask('[name="phone"]');
-
-          phoneRegular.test(elem.value);     
         }
-
       });
 
   });
