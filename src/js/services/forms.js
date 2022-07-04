@@ -255,12 +255,11 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
 
 
           mask('[name="phone"]');
-          console.log(elem.value, 'elem.value', elem.value.length, 'elem.length');
           
           if (elem.value.length === 1 && +elem.value.slice(0, 1) !== 1) {
-            elem.value = elem.value.replace(/[^1]/i, '+1');
+            elem.value = elem.value.replace(/[^1]/i, '1');
             
-          } else if (elem.value.length > 3 && +elem.value.slice(3, 4) < 2) {
+          } else if (elem.value.length > 4 && +elem.value.slice(3, 4) < 2) {
             console.log('elem value 0 2-9', elem.value.slice(0, 3) );
             formMessage({message: formMessages.text, form: elem, parentNode: parentNode, style: style});
             elem.value = elem.value.slice(0, 3);
