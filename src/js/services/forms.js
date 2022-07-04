@@ -10,9 +10,7 @@ const postData = async (url, data) => {
     }, */
     body: data
   });
-  
-  //ставимо await щоб вернути promise
-  //коли він буде готовий
+
     //return await result.json(); //json-server
     return await result.text();
   };
@@ -205,7 +203,6 @@ const mask = (selector) => {
 
 function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0}) {
 
-  //const form = document.querySelector(formParentSelector);
   const form = document.querySelectorAll('form');
   const input = form[formId].querySelectorAll(formInputs);
   //const submit = document.querySelectorAll('form button');
@@ -255,10 +252,6 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
           //цифру не правильно, потрібно зупинити ввід наступної
           //цифри і повідомити про це відповідним текстом і
           //виділити неправильну цифру в input
-          
-          //можна кожен раз коли користувач вводить цифру
-          //якщо довжина elem.value менше ніж потрібна дописувати
-          //правильні цифри і перевіряти регулярним виразом
 
 
           mask('[name="phone"]');
