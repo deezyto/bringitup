@@ -1,0 +1,73 @@
+
+.hide {
+    display: none;
+}
+
+.module__info-controls {
+    position: relative;
+}
+
+.showup__content-slider {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    align-items: flex-start;
+}
+
+.modules__content-slider {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    align-items: flex-start;
+}
+
+.feed__slider {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    align-items: flex-start;
+}
+
+.module__video {
+    height: 1000px;
+}
+
+.msg {
+    display: block;
+    height: 0;
+    visibility: hidden;
+    opacity: 0;
+    transition: .3s all;
+}
+
+.msg__show {
+    /* height: 100%; */
+    visibility: visible;
+    opacity: 1;
+    transition: .5s all;
+}
+
+.join__evolution .form__block div input:focus {
+    background-color: rgba(216,216,216,.3);
+    color: white;
+}
+
+* {
+    overflow: auto;
+}
+  
+.join__evolution .form__block div input:invalid {
+    border: 1px solid;
+}
+
+.schedule__form .form__item input:invalid {
+    border: 1px solid blue;
+}
+
+.join__evolution .form__block div input:valid, .schedule__form .form__item input:valid {
+    border: none;
+}
+
+.download {
+    cursor: pointer;
+}
