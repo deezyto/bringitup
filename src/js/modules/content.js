@@ -4,35 +4,35 @@ function getLink(link = 0) {
   const linkList = {
     bitmap: {
       name: 'bitmap',
-      link: '/test/assets/img/Bitmap.jpg'
+      link: '../assets/img/Bitmap.jpg'
     },
     one: {
       name: 'one',
-      link: '/test/assets/img/feed_1.png'
+      link: '../assets/img/feed_1.png'
     },
     two: {
       name: 'two',
-      link: '/test/assets/img/feed_2.png'
+      link: '../assets/img/feed_2.png'
     },
     three: {
       name: 'three',
-      link: '/test/assets/img/main_light.jpg'
+      link: '../assets/img/main_light.jpg'
     },
     four: {
       name: 'four',
-      link: '/test/assets/img/module_bg.jpg'
+      link: '../assets/img/module_bg.jpg'
     },
     five: {
       name: 'five',
-      link: '/test/assets/img/showup.jpg'
+      link: '../assets/img/showup.jpg'
     },
     computer: {
       name: 'computer',
-      link: '/test/assets/img/slide_1_m.jpg'
+      link: '../assets/img/slide_1_m.jpg'
     },
     site: {
       name: 'site',
-      link: '/test/assets/img/talk_bg.jpg'
+      link: '../assets/img/talk_bg.jpg'
     }
   };
 
