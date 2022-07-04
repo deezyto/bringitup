@@ -94,7 +94,6 @@ function hideShow(parentSelector, hideOrShow = '') {
   
 }
 
-
 function showContent({parentSelector, button}) {
   const parent = document.querySelector(parentSelector);
   const childNodesArray = createArrChildNodes(parent);
