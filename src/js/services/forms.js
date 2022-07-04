@@ -1,5 +1,3 @@
-import { createArrChildNodes } from "../modules/childNodes";
-
 const postData = async (url, data) => {
 
   const result = await fetch(url, {
@@ -10,7 +8,6 @@ const postData = async (url, data) => {
     }, */
     body: data
   });
-
     //return await result.json(); //json-server
     return await result.text();
   };
@@ -30,9 +27,9 @@ const postData = async (url, data) => {
   console.log(forms, 'forms');
 
   const message = {
-    loading: 'Відбувається відбравка даних',
-    success: 'Дякуєм, скоро ми Вам зателефонуєм!',
-    failure: 'Щось пішло не так...'
+    loading: 'Data is being sent...',
+    success: 'Thank you, we will call you soon!',
+    failure: 'Something went wrong...'
   };
 
   function getForm(forms) {
@@ -127,7 +124,6 @@ function formMessage({message = '', form = '', parentNode = 0, style = 0, delete
         }
 
         selector = document.querySelector('.message');
-      
         selector.textContent = message;
 
         setTimeout(() => {
@@ -136,9 +132,7 @@ function formMessage({message = '', form = '', parentNode = 0, style = 0, delete
       } catch {
 
       }
-    
     }
-
 }
 
 const mask = (selector) => {
@@ -181,7 +175,6 @@ const mask = (selector) => {
         return a;
       }
 
-      //return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i >= val.length ? '' : a;
     });
 
     if (event.type === 'blur') {
@@ -205,20 +198,20 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
 
   const form = document.querySelectorAll('form');
   const input = form[formId].querySelectorAll(formInputs);
-  //const submit = document.querySelectorAll('form button');
 
   const formMessages = {
     text: 'You must enter more than 1 letter character',
     email: 'Please enter correct email: name@site.com',
-    phone: 'Please enter correct phone: +1 234 375 250'
+    phone: {
+      one: 'The first of the three digits must be in the range 2-9. Please enter correct phone: +1(234) 375-250',
+      two: 'The last two digits cannot be 11. Please enter correct phone: +1(234) 375-250'
+    }
   };
-
-  let template = '+1 (___) ___ ____';
   
   input.forEach((elem, i) => {
 
       elem.addEventListener('input', (e) => {
-        elem.setCustomValidity('');
+
         if (elem.type === 'text' && elem.id !== 'phone') {
           const textRegular = /[^a-z]/ig;
 
@@ -243,17 +236,6 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
 
         } else if (elem.id === 'phone') {
 
-        
-          //usa номер складається з +1 NXX NXX XXXX
-          //де n - номер від 2 до 9
-          //x число від 0 до 9, але не може бути xx 11
-          //xxxx - можуть бути любі цифри
-          //на єтапі ввода користувачем номера, якщо він ввів
-          //цифру не правильно, потрібно зупинити ввід наступної
-          //цифри і повідомити про це відповідним текстом і
-          //виділити неправильну цифру в input
-
-
           mask('[name="phone"]');
           
           if (elem.value.length === 1 && +elem.value.slice(0, 1) !== 1) {
@@ -261,32 +243,30 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
             
           } else if (elem.value.length > 4 && +elem.value.slice(3, 4) < 2) {
             console.log('elem value 0 2-9', elem.value.slice(0, 3) );
-            formMessage({message: formMessages.text, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: formMessages.phone.one, form: elem, parentNode: parentNode, style: style});
             elem.value = elem.value.slice(0, 3);
 
           } else if (elem.value.length === 9 && +elem.value.slice(8, 9) < 2) {
             console.log('elem value 4 2-9');
-            formMessage({message: formMessages.text, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: formMessages.phone.one, form: elem, parentNode: parentNode, style: style});
             elem.value = elem.value.slice(0, 8);
 
           } else if (elem.value.length === 6 && +elem.value.slice(4, 5) === 1 && elem.value.length === 6 && +elem.value.slice(5, 6) === 1) {
             console.log('elem value 2-3 dont 11');
-            formMessage({message: formMessages.text, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: formMessages.phone.two, form: elem, parentNode: parentNode, style: style});
             elem.value = elem.value.slice(0, 5);
 
           } else if (elem.value.length === 11 && +elem.value.slice(9, 10) === 1 && elem.value.length === 11 && +elem.value.slice(10, 11) === 1) {
             console.log('elem value 5-6 dont 11 ');
-            formMessage({message: formMessages.text, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: formMessages.phone.two, form: elem, parentNode: parentNode, style: style});
             elem.value = elem.value.slice(0, 10);
 
           } else {
             formMessage({deleteMessage: 1});
           }
         
-
         }
       });
-
   });
 
 }
