@@ -51,7 +51,6 @@ function getLink(link = 0) {
 }
   
 function download({selectorButton, attributeLink}) {
-
   const button = document.querySelectorAll(selectorButton);
   const link = document.querySelectorAll(`[${attributeLink}]`);
 

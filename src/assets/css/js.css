@@ -71,3 +71,16 @@
 .download {
     cursor: pointer;
 }
+
+.feed__item {
+    width: 200px;
+}
+
+.feed__item-active {
+   width: 410px;
+}
+
+.feed__slider {
+    margin-top: 30px;
+    min-height: 460px;
+}
