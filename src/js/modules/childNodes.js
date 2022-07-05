@@ -1,16 +1,17 @@
+
+//create child nodes for parent element (array)
 export function createArrChildNodes(parentSelector) {
 
-    //console.log(parentSelector.childNodes);
-    const childNodesArray = [];
+  const childNodesArray = [];
 
-    for (let elem of parentSelector.childNodes) {
-        if (elem.nodeName === '#text' || elem.nodeName === 'BUTTON') {
-            continue;
-        }
-        //замінимо пробіли на точки
-        let replaceSpace = elem.className.replace(/ /g, '.');
-        childNodesArray.push(replaceSpace);
+  for (let elem of parentSelector.childNodes) {
+    if (elem.nodeName === '#text' || elem.nodeName === 'BUTTON') {
+        continue;
     }
 
-    return childNodesArray;
+    let replaceSpace = elem.className.replace(/ /g, '.');
+    childNodesArray.push(replaceSpace);
+  }
+
+  return childNodesArray;
 }

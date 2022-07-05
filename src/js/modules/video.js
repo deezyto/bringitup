@@ -62,13 +62,13 @@ function video ({classVideo, buttonPlayClass, buttonCloseModalClass, modalClass,
     console.log('dont can set attribute in this page');
   }
 
-  function updateVideoStileForVideoViewHostory() {
+  function updateVideoStyleForVideoViewHistory() {
     for (let i = 0; i < button.length - 1; i++) {
       setVideoViewHistoryInLocalStorage(videoAttribute[i + 1].getAttribute(attributeVideoId), i);
     }
   }
 
-  updateVideoStileForVideoViewHostory();
+  updateVideoStyleForVideoViewHistory();
 
   function setStyleAfterUnlockVideo(videoNumber = 0) {
     const moduleVideo = video[videoNumber + 1];

@@ -1,18 +1,16 @@
-export function showHide(selector, plusMinus = 'plus', number = 0) {
+
+export function animationShowHide(selectorForAnimation, showHide = 'hide', heightShowContent = 50) {
     let animation;
-    if (plusMinus === 'minus') {
-      for (let i = number; i > 0; i--) {
-        selector.style.height = i + 'px';
-        animation = requestAnimationFrame(showHide);
+    if (showHide === 'hide') {
+      for (let i = heightShowContent; i > 0; i--) {
+        selectorForAnimation.style.height = i + 'px';
+        animation = requestAnimationFrame(animationShowHide);
       }
 
     } else {
-      for (let i = 0; i < number; i++) {
-        selector.style.height = i + 'px';
-        animation = requestAnimationFrame(showHide);
+      for (let i = 0; i < heightShowContent; i++) {
+        selectorForAnimation.style.height = i + 'px';
+        animation = requestAnimationFrame(animationShowHide);
       }
     }
-
 }
-
-export default showHide;

@@ -2,8 +2,10 @@
 import video from './modules/video';
 import sliderPage from './modules/sliderPages';
 import sliderMini from './modules/sliderMini';
-import showContent from './modules/content';
+import showElementsGradually from './modules/showElementsGradually';
 import sendForm from './services/forms';
+import download from './modules/getHideLinkForFile';
+import showHideContent from './modules/showHideContent';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -42,46 +44,42 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   } catch {
 
-    
   }
 
   try {
   sliderMini({
     parentSelector: '.showup__content-slider', 
     selectorPrev: '.showup__prev', 
-    selectorNext: '.showup__next', 
-    slideTitle: '.card__title',
-    slideArrow: '.card__controls-arrow',
-    sliderMini: 1
-  });
-   }
-  catch {
-
-  }
-
-  try {
-
-  
-  sliderMini({
-    parentSelector: '.modules__content-slider', 
-    selectorPrev: '.slick-prev.modules', 
-    selectorNext: '.slick-next.modules', 
-    slideTitle: '.card__title',
-    slideArrow: '.card__controls-arrow',
-    sliderMiniModules: 1,
-    currentSlide: '.sidecontrol__controls-count'
+    selectorNext: '.showup__next',
+    sliderType: 'mini',
+    selectorSlideTitle: '.card__title',
+    selectorSlideArrow: '.card__controls-arrow'
   });
   } catch {
 
   }
 
   try {
+  sliderMini({
+    parentSelector: '.modules__content-slider', 
+    selectorPrev: '.slick-prev.modules', 
+    selectorNext: '.slick-next.modules', 
+    sliderType: 'miniModules',
+    selectorSlideTitle: '.card__title',
+    selectorSlideArrow: '.card__controls-arrow',
+    selectorNextPage: '.sidecontrol__controls a',
+    selectorCurrentSlide: '.sidecontrol__controls-count'
+  });
+  } catch {
 
+  }
+
+  try {
   sliderMini({
     parentSelector: '.feed__slider', 
     selectorPrev: '.slick-prev.f', 
     selectorNext: '.slick-next.f',
-    sliderFeed: 1,
+    sliderType: 'feed',
     stepI: 1,
     plusClass: 'feed__item-active'
   });
@@ -101,9 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   try {
-    showContent({
+    showElementsGradually({
       parentSelector: '.difference__info-cards',
-      button: '.plus'
+      selectorButton: '.plus'
     });
     } catch (e) {
       console.log(e, 'showContent');
@@ -128,8 +126,26 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch {
 
   }
+  
+  try {
+    download({
+      selectorButton: '.download',
+      attributeLink: 'data-link'
+    });
+  } catch {
 
+  }
 
+  try {
+    showHideContent({
+      parentSelector: '.moduleapp',
+      selectorShowContent: '.msg',
+      selectorActive: '.msg__show',
+      heightShowContent: 100
+    });
+  } catch {
+
+  }
 
   
 });

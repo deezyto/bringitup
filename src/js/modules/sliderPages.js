@@ -1,21 +1,21 @@
 import {showContentTimeout} from './modal';
 import {createArrChildNodes} from './childNodes';
 
-export function hidePages({parentSelector, arr, title = 0, arrow = 0, removeClass = 0, sliderMini = 0, sliderMiniModules = 0, sliderFeed = 0}) {
+export function hidePages({parentSelector, arr, title = 0, arrow = 0, removeClass = 0, sliderType = ''}) {
         
     arr.forEach((elem, i) => {
         if (removeClass) {
             parentSelector.querySelector(`.${elem}`).classList.remove(removeClass);
-        } else if (sliderMini) {
+        } else if (sliderType === 'mini') {
             parentSelector.querySelector(`.${elem}`).style.display = 'none';
-        } else if (sliderMiniModules) {
+        } else if (sliderType === 'miniModules') {
+            parentSelector.querySelector(`.${elem}`).style.display = 'none';
 
-            parentSelector.querySelector(`.${elem}`).style.display = 'none';
             parentSelector.querySelectorAll(title)[i].style = 'transition: 0s all; opacity: 0.4';
             parentSelector.querySelectorAll(arrow)[i].style.opacity = '0';
             parentSelector.querySelectorAll('.card__controls')[i].style = 'transition: 0s all; margin-top: 0';
             parentSelector.querySelectorAll('.card__description')[i].style = 'transition: 0s all; opacity: 0';
-        } else if (sliderFeed) {
+        } else if (sliderType === 'feed') {
             //parentSelector.querySelector(`.${elem}`).style.display = 'none';
         } else {
             parentSelector.querySelector(`.${elem}`).style.display = 'none';
@@ -24,18 +24,19 @@ export function hidePages({parentSelector, arr, title = 0, arrow = 0, removeClas
     });
 }
 
-export function showPage({parentSelector, arr, number = 0, plusClass = 0, sliderMini = 0, sliderMiniModules = 0, sliderFeed = 0, title = 0, arrow = 0}) {
+export function showPage({parentSelector, arr, number = 0, plusClass = 0, sliderType = '', title = 0, arrow = 0}) {
 
     if (plusClass) {
         document.querySelector(`.${arr[number]}`).classList.add(plusClass);
-    } else if (sliderMini) {
+    } else if (sliderType === 'mini') {
         document.querySelectorAll(title)[number].style.opacity = '1';
         document.querySelectorAll(arrow)[number].style.opacity = '1';
 
         parentSelector.querySelector(`.${arr[number]}`).style = 'display: block';
         parentSelector.querySelector(`.${arr[number + 1]}`).style = 'display: block';
         
-    } else if (sliderMiniModules) {
+    } else if (sliderType === 'miniModules') {
+        
         parentSelector.querySelectorAll(title)[number].style = 'transition: .5s all; opacity: 1';
         parentSelector.querySelectorAll(arrow)[number].style.opacity = '1';
         parentSelector.querySelectorAll('.card__controls')[number].style = 'transition: .5s all; margin-top: -5em';
@@ -44,7 +45,7 @@ export function showPage({parentSelector, arr, number = 0, plusClass = 0, slider
         parentSelector.querySelector(`.${arr[number]}`).style = 'display: block';
         parentSelector.querySelector(`.${arr[number + 1]}`).style = 'display: block';
         parentSelector.querySelector(`.${arr[number + 2]}`).style = 'display: block';
-    } else if (sliderFeed) {
+    } else if (sliderType === 'feed') {
         //parentSelector.querySelector(`.${arr[number]}`).style = 'display: block';
     } else {
         //parentSelector.querySelector(`.${arr[number]}`).style = 'display: block';

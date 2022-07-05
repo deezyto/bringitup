@@ -1,35 +1,22 @@
-const postData = async (url, data) => {
-
-  const result = await fetch(url, {
-    method: "POST",
-    /* json-server
-    headers: {
-    'Content-type': 'application/json'
-    }, */
-    body: data
-  });
-    //return await result.json(); //json-server
-    return await result.text();
-  };
+import {postData} from "./services";
   
-  const getRequest = async (url) => {
-    const result = await fetch(url);
-  
-    if (!result.ok) {
-      throw new Error(`Could not fetch ${url}, status: ${result.status}`);
-    }
-  
-    return await result.json();
-  };
-
-
   const forms = document.querySelectorAll('form');
   console.log(forms, 'forms');
 
-  const message = {
+  const messagesForSendForm = {
     loading: 'Data is being sent...',
     success: 'Thank you, we will call you soon!',
     failure: 'Something went wrong...'
+  };
+
+  const messagesForWrongPhoneNumber = {
+    text: 'You must enter more than 1 letter character',
+    email: 'Please enter correct email: name@site.com',
+    phone: {
+      one: `The phone number must start with the number 1. Please enter correct phone: +1(234) 375-250`,
+      two: `The first of the three digits must be in the range 2-9. Please enter correct phone: +1(234) 375-250`,
+      three: `The last two digits cannot be 11. Please enter correct phone: +1(234) 375-250`
+    }
   };
 
   function getForm(forms) {
@@ -45,7 +32,7 @@ const postData = async (url, data) => {
       e.preventDefault();
       console.log('form submit');
       console.log(form, 'form item');
-      formMessage(message.loading, form);
+      formMessage(messagesForSendForm.loading, form);
 
       const formData = new FormData(form);
       
@@ -61,12 +48,12 @@ const postData = async (url, data) => {
 
       .then(data => {
         console.log(data, 'ok');
-        formMessage({message: message.success, form: form, style: 1});
+        formMessage({message: messagesForSendForm.success, form: form, style: 1});
 
       })
       .catch((e) => {
         console.log(e, 'dont ok');
-        formMessage({message: message.failure, form: form, style: 1});
+        formMessage({message: messagesForSendForm.failure, form: form, style: 1});
 
       })
       .finally(() => {
@@ -199,16 +186,6 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
   const form = document.querySelectorAll('form');
   const input = form[formId].querySelectorAll(formInputs);
 
-  const formMessages = {
-    text: 'You must enter more than 1 letter character',
-    email: 'Please enter correct email: name@site.com',
-    phone: {
-      one: `The phone number must start with the number 1. Please enter correct phone: +1(234) 375-250`,
-      two: `The first of the three digits must be in the range 2-9. Please enter correct phone: +1(234) 375-250`,
-      three: `The last two digits cannot be 11. Please enter correct phone: +1(234) 375-250`
-    }
-  };
-
   input.forEach((elem, i) => {
 
       elem.addEventListener('input', (e) => {
@@ -217,7 +194,7 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
           const textRegular = /[^a-z]/ig;
 
           if (textRegular.test(elem.value)) {
-            formMessage({message: formMessages.text, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: messagesForWrongPhoneNumber.text, form: elem, parentNode: parentNode, style: style});
           } else {
             formMessage({deleteMessage: 1});
           }
@@ -228,7 +205,7 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
           const emailRegular = /[^a-z0-9@.]/ig;
 
           if (emailRegular.test(elem.value)) {
-            formMessage({message: formMessages.text, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: messagesForWrongPhoneNumber.text, form: elem, parentNode: parentNode, style: style});
           } else {
             formMessage({deleteMessage: 1});
           }
@@ -247,33 +224,33 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
             //if first n digit +n(xxx) xxx-xxxx !== 1
           } else if (elem.value.length === 1 && +elem.value.slice(0, 1) !== 1) {
             elem.value = elem.value.replace(/[^1]/i, '+1');
-            formMessage({message: formMessages.phone.one, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: messagesForWrongPhoneNumber.phone.one, form: elem, parentNode: parentNode, style: style});
 
             //if n digit +1(nxx) xxx-xxxx < 2
           } else if (elem.value.length === 2 && +elem.value.slice(1, 2) < 2) {
             elem.value = elem.value.slice(0, 1);
 
           } else if (elem.value.length === 3 && +elem.value.slice(2, 3) < 2) {
-            formMessage({message: formMessages.phone.two, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: messagesForWrongPhoneNumber.phone.two, form: elem, parentNode: parentNode, style: style});
             elem.value = elem.value.slice(0, 2);
             
           } else if (elem.value.length === 4 && +elem.value.slice(3, 4) < 2) {
-            formMessage({message: formMessages.phone.two, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: messagesForWrongPhoneNumber.phone.two, form: elem, parentNode: parentNode, style: style});
             elem.value = elem.value.slice(0, 3);
             //if n digit +1(xxx) nxx-xxxx < 2
           } else if (elem.value.length === 7 && +elem.value.slice(6, 7) < 2) {
-            formMessage({message: formMessages.phone.two, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: messagesForWrongPhoneNumber.phone.two, form: elem, parentNode: parentNode, style: style});
             elem.value = elem.value.slice(0, 6);
           } else if (elem.value.length === 9 && +elem.value.slice(8, 9) < 2) {
-            formMessage({message: formMessages.phone.two, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: messagesForWrongPhoneNumber.phone.two, form: elem, parentNode: parentNode, style: style});
             elem.value = elem.value.slice(0, 8);
             //if n1 & n2 digits +1(xnn) xxx-xxxx === 1
           } else if (elem.value.length === 6 && +elem.value.slice(4, 5) === 1 && elem.value.length === 6 && +elem.value.slice(5, 6) === 1) {
-            formMessage({message: formMessages.phone.three, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: messagesForWrongPhoneNumber.phone.three, form: elem, parentNode: parentNode, style: style});
             elem.value = elem.value.slice(0, 5);
             //if n1 & n2 digits +1(xxx) xnn-xxxx === 1
           } else if (elem.value.length === 11 && +elem.value.slice(9, 10) === 1 && elem.value.length === 11 && +elem.value.slice(10, 11) === 1) {
-            formMessage({message: formMessages.phone.three, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: messagesForWrongPhoneNumber.phone.three, form: elem, parentNode: parentNode, style: style});
             elem.value = elem.value.slice(0, 10);
 
           } else {
