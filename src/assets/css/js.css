@@ -52,10 +52,10 @@
     color: white;
 }
 
-/* {
+.join__wrapper {
     overflow: auto;
-} */
-  
+}
+
 .join__evolution .form__block div input:invalid {
     border: 1px solid;
 }

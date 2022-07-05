@@ -203,11 +203,12 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
     text: 'You must enter more than 1 letter character',
     email: 'Please enter correct email: name@site.com',
     phone: {
-      one: 'The first of the three digits must be in the range 2-9. Please enter correct phone: +1(234) 375-250',
-      two: 'The last two digits cannot be 11. Please enter correct phone: +1(234) 375-250'
+      one: `The phone number must start with the number 1. Please enter correct phone: +1(234) 375-250`,
+      two: `The first of the three digits must be in the range 2-9. Please enter correct phone: +1(234) 375-250`,
+      three: `The last two digits cannot be 11. Please enter correct phone: +1(234) 375-250`
     }
   };
-  
+
   input.forEach((elem, i) => {
 
       elem.addEventListener('input', (e) => {
@@ -235,30 +236,44 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
           elem.value = elem.value.replace(emailRegular, '');
 
         } else if (elem.id === 'phone') {
+          console.log('elem value 0 2-9 before', elem.value);
 
           mask('[name="phone"]');
-          
-          if (elem.value.length === 1 && +elem.value.slice(0, 1) !== 1) {
-            elem.value = elem.value.replace(/[^1]/i, '1');
+
+          //if first n digit +n(xxx) xxx-xxxx === 1, change input value to +1
+          if (elem.value.length === 1 && +elem.value.slice(0, 1) === 1) {
+            elem.value = elem.value.replace(/[1]/i, '+1');
+
+            //if first n digit +n(xxx) xxx-xxxx !== 1
+          } else if (elem.value.length === 1 && +elem.value.slice(0, 1) !== 1) {
+            elem.value = elem.value.replace(/[^1]/i, '+1');
+            formMessage({message: formMessages.phone.one, form: elem, parentNode: parentNode, style: style});
+
+            //if n digit +1(nxx) xxx-xxxx < 2
+          } else if (elem.value.length === 2 && +elem.value.slice(1, 2) < 2) {
+            elem.value = elem.value.slice(0, 1);
+
+          } else if (elem.value.length === 3 && +elem.value.slice(2, 3) < 2) {
+            formMessage({message: formMessages.phone.two, form: elem, parentNode: parentNode, style: style});
+            elem.value = elem.value.slice(0, 2);
             
-          } else if (elem.value.length > 4 && +elem.value.slice(3, 4) < 2) {
-            console.log('elem value 0 2-9', elem.value.slice(0, 3) );
-            formMessage({message: formMessages.phone.one, form: elem, parentNode: parentNode, style: style});
+          } else if (elem.value.length === 4 && +elem.value.slice(3, 4) < 2) {
+            formMessage({message: formMessages.phone.two, form: elem, parentNode: parentNode, style: style});
             elem.value = elem.value.slice(0, 3);
-
+            //if n digit +1(xxx) nxx-xxxx < 2
+          } else if (elem.value.length === 7 && +elem.value.slice(6, 7) < 2) {
+            formMessage({message: formMessages.phone.two, form: elem, parentNode: parentNode, style: style});
+            elem.value = elem.value.slice(0, 6);
           } else if (elem.value.length === 9 && +elem.value.slice(8, 9) < 2) {
-            console.log('elem value 4 2-9');
-            formMessage({message: formMessages.phone.one, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: formMessages.phone.two, form: elem, parentNode: parentNode, style: style});
             elem.value = elem.value.slice(0, 8);
-
+            //if n1 & n2 digits +1(xnn) xxx-xxxx === 1
           } else if (elem.value.length === 6 && +elem.value.slice(4, 5) === 1 && elem.value.length === 6 && +elem.value.slice(5, 6) === 1) {
-            console.log('elem value 2-3 dont 11');
-            formMessage({message: formMessages.phone.two, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: formMessages.phone.three, form: elem, parentNode: parentNode, style: style});
             elem.value = elem.value.slice(0, 5);
-
+            //if n1 & n2 digits +1(xxx) xnn-xxxx === 1
           } else if (elem.value.length === 11 && +elem.value.slice(9, 10) === 1 && elem.value.length === 11 && +elem.value.slice(10, 11) === 1) {
-            console.log('elem value 5-6 dont 11 ');
-            formMessage({message: formMessages.phone.two, form: elem, parentNode: parentNode, style: style});
+            formMessage({message: formMessages.phone.three, form: elem, parentNode: parentNode, style: style});
             elem.value = elem.value.slice(0, 10);
 
           } else {
