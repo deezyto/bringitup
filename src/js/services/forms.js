@@ -30,36 +30,26 @@ import {postData} from "./services";
   function bindPostData(form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      console.log('form submit');
-      console.log(form, 'form item');
+
       formMessage(messagesForSendForm.loading, form);
 
       const formData = new FormData(form);
       
       //json server
-      //перетворюєм методом entries() formData в масив масивів
-      //перетворюєм масив масивів в звичайний обєкт
-      //перетворюєм обєкт в формат json
-      const json = JSON.stringify(Object.fromEntries(formData.entries()));
-
+      //const json = JSON.stringify(Object.fromEntries(formData.entries()));
       //postData('http://localhost:3000/posts', json)
 
       postData('assets/question.php', formData)
 
       .then(data => {
-        console.log(data, 'ok');
         formMessage({message: messagesForSendForm.success, form: form, style: 1});
-
       })
       .catch((e) => {
-        console.log(e, 'dont ok');
         formMessage({message: messagesForSendForm.failure, form: form, style: 1});
-
       })
       .finally(() => {
         form.reset();
       });
-
     });
   }
 
@@ -213,7 +203,6 @@ function sendForm({formInputs = ['input'], formId = 0, parentNode = 0, style = 0
           elem.value = elem.value.replace(emailRegular, '');
 
         } else if (elem.id === 'phone') {
-          console.log('elem value 0 2-9 before', elem.value);
 
           mask('[name="phone"]');
 

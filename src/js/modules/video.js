@@ -1,4 +1,8 @@
 
+//Video playback after click the play button. After 
+//watching the video (you can set the type of verification - low or high),
+//the next video is opened for viewing by the user. History of which videos 
+//are available for viewing is stored in localStorage.
 function video ({classVideo, buttonPlayClass, buttonCloseModalClass, modalClass, classVideoIdAttribute, attributeVideoId, 
   frameId, videoPlayText, videoBlockAttribute = 'data-videoBlock', blockVideoMode = 'low'}) {
 

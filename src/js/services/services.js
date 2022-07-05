@@ -1,5 +1,5 @@
 
-
+//send post request on server MAMP
 export const postData = async (url, data) => {
   const result = await fetch(url, {
     method: "POST",
@@ -11,14 +11,4 @@ export const postData = async (url, data) => {
   });
   //return await result.json(); //json-server
   return await result.text();
-};
-
-const getRequest = async (url) => {
-  const result = await fetch(url);
-
-  if (!result.ok) {
-    throw new Error(`Could not fetch ${url}, status: ${result.status}`);
-  }
-
-  return await result.json();
 };
